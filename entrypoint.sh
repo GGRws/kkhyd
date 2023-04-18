@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-# 设置各变量
-UUID='cd0f0dac-2779-4306-aca2-54dc40800e40'
-VMESS_WSPATH='/vmess'
-VLESS_WSPATH='/vless'
-TROJAN_WSPATH='/trojan'
-SS_WSPATH='/shadowsocks'
+# 璁剧疆鍚勫彉閲?UUID='89c64594-ea89-4036-b4f2-174fe6fa3388'
+VMESS_WSPATH='/$UUID/vmess'
+VLESS_WSPATH='/$UUID/vless'
+TROJAN_WSPATH='/$UUID/trojan'
+SS_WSPATH='/$UUID/shadowsocks'
 
-# 安装系统依赖
+
+# 瀹夎绯荤粺渚濊禆
 check_dependencies() {
   DEPS_CHECK=("wget" "unzip")
   DEPS_INSTALL=(" wget" " unzip")
@@ -240,7 +240,7 @@ generate_argo() {
   cat > argo.sh << ABC
 #!/usr/bin/env bash
   
-# 下载并运行 Argo
+# 涓嬭浇骞惰繍琛?Argo
 check_file() {
   [ ! -e cloudflared ] && wget -O cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && chmod +x cloudflared
 }
@@ -271,21 +271,21 @@ div {
 </style>
 </head>
 <body bgcolor="#FFFFFF" text="#000000">
-<div><font color="#009900"><b>VMESS协议链接：</b></font></div>
+<div><font color="#009900"><b>VMESS鍗忚閾炬帴锛?/b></font></div>
 <div>vmess://\$(echo \$VMESS | base64 -w0)</div>
-<div><font color="#009900"><b>VLESS协议链接：</b></font></div>
+<div><font color="#009900"><b>VLESS鍗忚閾炬帴锛?/b></font></div>
 <div>vless://${UUID}@icook.hk:443?encryption=none&security=tls&sni=\${ARGO}&type=ws&host=\${ARGO}&path=${VLESS_WSPATH}?ed=2048#Argo_xray_vless</div>
-<div><font color="#009900"><b>TROJAN协议链接：</b></font></div>
+<div><font color="#009900"><b>TROJAN鍗忚閾炬帴锛?/b></font></div>
 <div>trojan://${UUID}@icook.hk:443?security=tls&sni=\${ARGO}&type=ws&host=\${ARGO}&path=${TROJAN_WSPATH}?ed=2048#Argo_xray_trojan</div>
-<div><font color="#009900"><b>SS协议明文：</b></font></div>
-<div>服务器地址：icook.hk</div>
-<div>端口：443</div>
-<div>密码：${UUID}</div>
-<div>加密方式：chacha20-ietf-poly1305</div>
-<div>传输协议：ws</div>
-<div>host：\${ARGO}</div>
-<div>path路径：$SS_WSPATH?ed=2048</div>
-<div>TLS：开启</div>
+<div><font color="#009900"><b>SS鍗忚鏄庢枃锛?/b></font></div>
+<div>鏈嶅姟鍣ㄥ湴鍧€锛歩cook.hk</div>
+<div>绔彛锛?43</div>
+<div>瀵嗙爜锛?{UUID}</div>
+<div>鍔犲瘑鏂瑰紡锛歝hacha20-ietf-poly1305</div>
+<div>浼犺緭鍗忚锛歸s</div>
+<div>host锛歕${ARGO}</div>
+<div>path璺緞锛?SS_WSPATH?ed=2048</div>
+<div>TLS锛氬紑鍚?/div>
 </body>
 </html>
 EOF
@@ -303,22 +303,20 @@ generate_nezha() {
   cat > nezha.sh << EOF
 #!/usr/bin/env bash
 
-# 哪吒的三个参数
-NEZHA_SERVER=${NEZHA_SERVER}
+# 鍝悞鐨勪笁涓弬鏁?NEZHA_SERVER=${NEZHA_SERVER}
 NEZHA_PORT=${NEZHA_PORT}
 NEZHA_KEY=${NEZHA_KEY}
 
-# 检测是否已运行
+# 妫€娴嬫槸鍚﹀凡杩愯
 check_run() {
-  [[ \$(pidof nezha-agent) ]] && echo "哪吒客户端正在运行中" && exit
+  [[ \$(pidof nezha-agent) ]] && echo "鍝悞瀹㈡埛绔鍦ㄨ繍琛屼腑" && exit
 }
 
-# 三个变量不全则不安装哪吒客户端
-check_variable() {
+# 涓変釜鍙橀噺涓嶅叏鍒欎笉瀹夎鍝悞瀹㈡埛绔?check_variable() {
   [[ -z "\${NEZHA_SERVER}" || -z "\${NEZHA_PORT}" || -z "\${NEZHA_KEY}" ]] && exit
 }
 
-# 下载最新版本 Nezha Agent
+# 涓嬭浇鏈€鏂扮増鏈?Nezha Agent
 download_agent() {
   if [ ! -e nezha-agent ]; then
     URL=\$(wget -qO- -4 "https://api.github.com/repos/naiba/nezha/releases/latest" | grep -o "https.*linux_amd64.zip")
@@ -327,8 +325,7 @@ download_agent() {
   fi
 }
 
-# 运行客户端
-run() {
+# 杩愯瀹㈡埛绔?run() {
   [[ ! \$PROCESS =~ nezha-agent && -e nezha-agent ]] && chmod +x ./nezha-agent && ./nezha-agent -s \${NEZHA_SERVER}:\${NEZHA_PORT} -p \${NEZHA_KEY}
 }
 
